@@ -1,0 +1,54 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String    @id @unique @default(cuid())
+  provider_id     String    @unique
+  hashed_password String?
+  session         Session[]
+  plots           Plot[]
+
+  @@map("user")
+}
+
+model Session {
+  id           String @id @unique
+  user_id      String
+  expires      BigInt
+  idle_expires BigInt
+  user         User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@map("session")
+}
+
+model Plot {
+  id       String  @id @unique @default(uuid())
+  name     String
+  plot_id  Int     @unique
+  owner    User    @relation(fields: [owner_id], references: [id], onDelete: Cascade)
+  owner_id String
+  sounds   Sound[]
+  
+  @@map("plot")
+}
+
+model Sound {
+  id     String  @id @unique @default(uuid()) // mostly not used to identify sounds, but to still make them unique in the DB
+  name   String  @unique
+  Plot   Plot?   @relation(fields: [plot_id], references: [id], onDelete: Cascade)
+  plot_id String?
+  file_id String
+
+  @@index([name, plot_id])
+  @@map("sound")
+}
