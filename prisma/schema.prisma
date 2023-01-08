@@ -10,12 +10,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  Basic // An authorized user (anyone who signs up) only 1 plot with 2 sounds
+  Beta // A personally authorized user (friends / beta testers) 5 plots with 5 sounds each
+  Mod // Moderator unlimited plots and the ability to delete others plots/sounds
+}
+
 model User {
   id              String    @id @unique @default(cuid())
   provider_id     String    @unique
   hashed_password String?
   session         Session[]
   plots           Plot[]
+  username        String    @unique // Minecraft IGN
+  role            Role      @default(Basic)
 
   @@map("user")
 }
@@ -33,19 +41,19 @@ model Session {
 
 model Plot {
   id       String  @id @unique @default(uuid())
-  name     String
+  name     String?
   plot_id  Int     @unique
   owner    User    @relation(fields: [owner_id], references: [id], onDelete: Cascade)
   owner_id String
   sounds   Sound[]
-  
+
   @@map("plot")
 }
 
 model Sound {
-  id     String  @id @unique @default(uuid()) // mostly not used to identify sounds, but to still make them unique in the DB
-  name   String  @unique
-  Plot   Plot?   @relation(fields: [plot_id], references: [id], onDelete: Cascade)
+  id      String  @id @unique @default(uuid()) // mostly not used to identify sounds, but to still make them unique in the DB
+  name    String  @unique
+  plot    Plot?   @relation(fields: [plot_id], references: [id], onDelete: Cascade)
   plot_id String?
   file_id String
 
