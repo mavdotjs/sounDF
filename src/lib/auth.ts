@@ -15,17 +15,44 @@ export const auth = lucia({
             where: {
                 id: userData.id
             },
-            include: {
+            // include: {
+            //     plots: {
+            //         include: {
+            //             sounds: {
+            //                 include: {
+            //                     plot: false
+            //                 }
+            //             },
+            //             owner: false
+            //         }
+            //     },
+                
+            // },
+            select: {
+                hashed_password: false,
+                id: true,
                 plots: {
-                    include: {
+                    select: {
+                        id: true,
+                        name: true,
+                        owner: false,
+                        owner_id: true,
+                        plot_id: true,
                         sounds: {
-                            include: {
-                                plot: false
+                            select: {
+                                file_id: true,
+                                id: true,
+                                name: true,
+                                plot: false,
+                                plot_id: true
                             }
-                        },
-                        owner: false
+                        }
                     }
-                }
+                },
+                provider_id: false,
+                role: true,
+                session: false,
+                username: true
             }
         })
         return user

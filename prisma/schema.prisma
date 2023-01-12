@@ -51,7 +51,7 @@ model Plot {
 }
 
 model Sound {
-  id      String  @id @unique @default(uuid()) // mostly not used to identify sounds, but to still make them unique in the DB
+  id      String  @id @unique @default(cuid()) // only used in the database to recognize sounds, 
   name    String  @unique
   plot    Plot?   @relation(fields: [plot_id], references: [id], onDelete: Cascade)
   plot_id String?

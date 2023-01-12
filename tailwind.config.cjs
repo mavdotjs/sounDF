@@ -1,13 +1,12 @@
 const forms = require("@tailwindcss/forms");
 
 const config = {
-  content: ["./src/**/*.{html,js,svelte,ts}"],
-
+  content: ["./src/**/*.{html,js,svelte,ts}", require('path').join(require.resolve('@skeletonlabs/skeleton'), '../**/*.{html,js,svelte,ts}')],
   theme: {
     extend: {},
   },
-
-  plugins: [forms],
+  darkMode: 'class',
+  plugins: [forms, require('@skeletonlabs/skeleton/tailwind/theme.cjs')],
 };
 
 module.exports = config;
