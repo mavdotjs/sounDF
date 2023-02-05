@@ -18,12 +18,14 @@ enum Role {
 
 model User {
   id              String    @id @unique @default(cuid())
+  ig_uuid         String    @unique
   provider_id     String    @unique
   hashed_password String?
   session         Session[]
   plots           Plot[]
   username        String    @unique // Minecraft IGN
   role            Role      @default(Basic)
+  Code            Code?
 
   @@map("user")
 }
@@ -59,4 +61,13 @@ model Sound {
 
   @@index([name, plot_id])
   @@map("sound")
+}
+
+model Code {
+  id     String  @id @default(uuid())
+  code   String  @unique @default(cuid())
+  used   Boolean @default(false)
+  user   User?   @relation(fields: [userId], references: [id])
+  userId String? @unique
+  type   Role    @default(Beta)
 }

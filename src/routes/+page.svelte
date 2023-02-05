@@ -1,6 +1,3 @@
-<script>
-    export let data;
-    console.log(data)
-</script>
+No more texture packs for custom sounds annoying your players!
 
-{JSON.stringify(data)}
+Try sounDF today!

@@ -24,7 +24,8 @@ export const actions: Actions = {
 			const user = await auth.createUser("username", username, {
 				password,
 				attributes: {
-					username
+					username,
+					ig_uuid: "uuid"
 				}
 			});
 			const session = await auth.createSession(user.id);
